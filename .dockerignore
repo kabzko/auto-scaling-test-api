@@ -1,0 +1,10 @@
+Dockerfile
+.dockerignore
+README.md
+
+# Python
+*.pyc
+*~
+__pycache__
+
+.vscode/
