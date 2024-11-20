@@ -11,23 +11,36 @@ def index():
 
 @app.get("/test")
 def index():
-    # Target ~60% CPU usage through controlled computation
-    size = 5000  # Reduced matrix size for more controlled CPU usage
-    iterations = 3  # Number of matrix operations to perform
+    # Target moderate CPU usage through controlled computation
+    size = 1000  # Significantly reduced matrix size to prevent memory issues
+    iterations = 2  # Reduced number of iterations
     
-    # Initialize matrices
-    matrices = []
-    for _ in range(iterations):
-        matrices.append(np.random.rand(size, size))
-    
-    # Perform matrix operations to achieve ~60% CPU load
-    result = matrices[0]
-    for i in range(1, iterations):
-        result = np.dot(result, matrices[i])
-        # Add element-wise operations to fine-tune CPU usage
-        result = np.sin(result) + np.cos(result)
-    
-    # Moderate memory usage
-    buffer = np.zeros((size, size))
-    buffer += result  # Keep the result in memory
+    try:
+        # Initialize smaller matrices
+        matrices = []
+        for _ in range(iterations):
+            matrices.append(np.random.rand(size, size))
+        
+        # Perform fewer matrix operations
+        result = matrices[0]
+        for i in range(1, iterations):
+            result = np.dot(result, matrices[i])
+            # Simplified operations
+            result = np.sin(result)
+        
+        # Clean up to free memory
+        del matrices
+        
+        # Use smaller buffer
+        buffer = np.zeros((size//2, size//2))
+        buffer += result[:size//2, :size//2]  # Store only a portion
+        
+        # Clean up
+        del result
+        del buffer
+        
+    except Exception as e:
+        print(f"Error in computation: {e}")
+        return "Computation error"
+
     return "Test!"
