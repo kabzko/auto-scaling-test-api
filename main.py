@@ -1,4 +1,5 @@
-import psutil, requests, uvicorn, numpy as np
+import psutil, socket, requests, uvicorn
+import numpy as np
 from fastapi import FastAPI
 from mangum import Mangum
 
@@ -7,11 +8,12 @@ handler = Mangum(app)
 
 @app.get("/")
 def index():
-    # Get EC2 instance IP
+    # Get local IP address
     try:
-        ip = requests.get('http://169.254.169.254/latest/meta-data/public-ipv4', timeout=1).text
+        hostname = socket.gethostname()
+        ip = socket.gethostbyname(hostname)
     except:
-        ip = "Not running on EC2"
+        ip = "Could not determine IP"
         
     # Get CPU usage percentage
     cpu_usage = psutil.cpu_percent()
