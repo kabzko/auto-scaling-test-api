@@ -1,4 +1,4 @@
-import uvicorn, numpy as np
+import psutil, requests, uvicorn, numpy as np
 from fastapi import FastAPI
 from mangum import Mangum
 
@@ -7,7 +7,19 @@ handler = Mangum(app)
 
 @app.get("/")
 def index():
-    return "Hello World!"
+    # Get EC2 instance IP
+    try:
+        ip = requests.get('http://169.254.169.254/latest/meta-data/public-ipv4', timeout=1).text
+    except:
+        ip = "Not running on EC2"
+        
+    # Get CPU usage percentage
+    cpu_usage = psutil.cpu_percent()
+    
+    return {
+        "server_ip": ip,
+        "cpu_usage": f"{cpu_usage}%"
+    }
 
 @app.get("/test")
 def index():
