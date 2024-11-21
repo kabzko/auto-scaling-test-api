@@ -1,4 +1,4 @@
-import psutil, socket, requests, uvicorn
+import psutil, socket, requests, time, uvicorn
 import numpy as np
 from fastapi import FastAPI
 from mangum import Mangum
