@@ -19,6 +19,7 @@ def index():
     cpu_usage = psutil.cpu_percent()
     
     return {
+        "server_name": hostname,
         "server_ip": ip,
         "cpu_usage": f"{cpu_usage}%"
     }
