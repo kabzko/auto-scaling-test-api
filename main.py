@@ -28,7 +28,7 @@ def index():
     # Calculate target CPU usage over time
     start_time = time.time()
     duration = 30 * 60  # 30 minutes in seconds
-    target_cpu = 50  # Target 50% CPU usage per call
+    target_cpu = 80  # Target 80% CPU usage per call
     
     # Get initial CPU usage
     initial_cpu = psutil.cpu_percent(interval=1)
@@ -43,13 +43,13 @@ def index():
         # If process CPU usage is below target, do calculations
         if process_cpu < target_cpu:
             # Adjust matrix size based on current usage
-            matrix_size = int(200 * (target_cpu / process_cpu)) if process_cpu > 0 else 400
-            matrix_size = min(max(matrix_size, 100), 1000)  # Increased bounds for higher CPU usage
+            matrix_size = int(400 * (target_cpu / process_cpu)) if process_cpu > 0 else 800
+            matrix_size = min(max(matrix_size, 200), 2000)  # Increased bounds for higher CPU usage
             
             # Matrix multiplication with adjusted size
             np.random.rand(matrix_size, matrix_size).dot(np.random.rand(matrix_size, matrix_size))
         else:
-            # Sleep for shorter time when above target since we want higher CPU usage
-            time.sleep(0.1)
+            # Very short sleep when above target since we want very high CPU usage
+            time.sleep(0.05)
 
     return "Test completed!"
